@@ -5,7 +5,7 @@ class State
   def_delegators :@state, :each, :[], :[]=
   include Enumerable
 
-  attr_accessor :rows, :cols, :humans, :zombies
+  attr_accessor :state, :rows, :cols, :humans, :zombies
 
   def initialize(args={})
     @rows = args.fetch(:rows, 5)
@@ -32,6 +32,15 @@ class State
       puts "#"
     end
     draw_bottom_border
+  end
+
+  def generate_substates(turn)
+    moves = move_team(turn)
+    if turn == :humans
+      [State.new(rows: rows, cols: cols, humans: moves, zombies: zombies)]
+    elsif turn == :zombies
+      [State.new(rows: rows, cols: cols, humans: humans, zombies: moves)]
+    end
   end
 
   private
@@ -82,4 +91,58 @@ class State
 
   alias_method :draw_top_border, :draw_top_bottom_border
   alias_method :draw_bottom_border, :draw_top_bottom_border
+
+  def move_team(turn)
+    team = clone_team(turn)
+    team.shuffle.each do |member|
+      directions.shuffle.each do |direction|
+        if can_move?(member, direction)
+          move_member(member, direction)
+          break
+        end
+      end
+    end
+  end
+
+  def clone_team(turn)
+    if turn == :humans
+      humans.clone
+    elsif turn == :zombies
+      zombies.clone
+    end
+  end
+
+  def directions
+    [:up, :down, :right, :left]
+  end
+
+  def can_move?(member, direction)
+    if direction == :up && member[0] > 0 &&
+        state[member[0] - 1][member[1]].nil?
+      return true
+    elsif direction == :down && member[0] < rows - 1 &&
+            state[member[0] + 1][member[1]].nil?
+      return true
+    elsif direction == :right && member[1] < cols - 1 &&
+            state[member[0]][cols - 1].nil?
+      return true
+    elsif direction == :left && member[1] > 0 &&
+            state[member[0]][0].nil?
+      return true
+    else
+      return false
+    end
+  end
+
+  def move_member(member, direction)
+    if direction == :up
+      member[0] -= 1
+    elsif direction == :down
+      member[0] += 1
+    elsif direction == :right
+      member[1] += 1
+    elsif direction == :left
+      member[1] -= 1
+    end
+  end
 end

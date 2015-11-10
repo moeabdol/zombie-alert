@@ -92,4 +92,54 @@ describe State do
                                          "#Z    H#\n" +
                                          "########\n").to_stdout
   end
+
+  describe "team movements" do
+    it "identify if team memeber can move up" do
+      state = State.new(humans: [[0, 0], [4, 0]])
+      expect(state.send(:can_move?, [0, 0], :up)).to be_falsy
+      expect(state.send(:can_move?, [4, 0], :up)).to be_truthy
+    end
+
+    it "identify if team memeber can move down" do
+      state = State.new(humans: [[0, 0], [4, 0]])
+      expect(state.send(:can_move?, [0, 0], :down)).to be_truthy
+      expect(state.send(:can_move?, [4, 0], :down)).to be_falsy
+    end
+
+    it "identify if team memeber can move right" do
+      state = State.new(humans: [[0, 0], [4, 4]])
+      expect(state.send(:can_move?, [0, 0], :right)).to be_truthy
+      expect(state.send(:can_move?, [4, 4], :right)).to be_falsy
+    end
+
+    it "identify if team memeber can move left" do
+      state = State.new(humans: [[0, 0], [4, 4]])
+      expect(state.send(:can_move?, [0, 0], :left)).to be_falsy
+      expect(state.send(:can_move?, [4, 4], :left)).to be_truthy
+    end
+
+    it "moves team member up" do
+      state = State.new(humans: [[4, 4]])
+      state.send(:move_member, state.humans[0], :up)
+      expect(state.humans[0]).to match([3, 4])
+    end
+
+    it "moves team member down" do
+      state = State.new(humans: [[0, 4]])
+      state.send(:move_member, state.humans[0], :down)
+      expect(state.humans[0]).to match([1, 4])
+    end
+
+    it "moves team member right" do
+      state = State.new(humans: [[0, 0]])
+      state.send(:move_member, state.humans[0], :right)
+      expect(state.humans[0]).to match([0, 1])
+    end
+
+    it "moves team member left" do
+      state = State.new(humans: [[4, 4]])
+      state.send(:move_member, state.humans[0], :left)
+      expect(state.humans[0]).to match([4, 3])
+    end
+  end
 end
