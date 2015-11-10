@@ -11,6 +11,7 @@ describe Node do
       node.generate_children
       expect(state.zombies).to match([[0, 4], [4, 0]])
       expect(state.humans).not_to match([[0, 0], [2, 2], [4, 4]])
+      expect(node.children.count).to eq(1)
     end
 
     it "generates child nodes with states where zombies move" do
@@ -18,6 +19,7 @@ describe Node do
       node.generate_children
       expect(state.humans).to match([[0, 0], [2, 2], [4, 4]])
       expect(state.humans).not_to match([[0, 4], [4, 0]])
+      expect(node.children.count).to eq(1)
     end
   end
 end

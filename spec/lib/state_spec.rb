@@ -147,32 +147,32 @@ describe State do
     it "converts humans on top of zombies" do
       state = State.new(humans: [[1, 2]], zombies: [[2, 2]])
       expect(state.humans.count).to eq(0)
-      expect(state.humans).to match([])
       expect(state.zombies.count).to eq(2)
+      expect(state.humans).to match([])
       expect(state.zombies).to include([2, 2], [1, 2])
     end
 
     it "converts humans below of zombies" do
       state = State.new(humans: [[2, 2]], zombies: [[1, 2]])
       expect(state.humans.count).to eq(0)
-      expect(state.humans).to match([])
       expect(state.zombies.count).to eq(2)
+      expect(state.humans).to match([])
       expect(state.zombies).to include([2, 2], [1, 2])
     end
 
     it "converts humans on right of zombies" do
       state = State.new(humans: [[1, 3]], zombies: [[1, 2]])
       expect(state.humans.count).to eq(0)
-      expect(state.humans).to match([])
       expect(state.zombies.count).to eq(2)
+      expect(state.humans).to match([])
       expect(state.zombies).to include([1, 3], [1, 2])
     end
 
     it "converts humans on left of zombies" do
       state = State.new(humans: [[1, 1]], zombies: [[1, 2]])
       expect(state.humans.count).to eq(0)
-      expect(state.humans).to match([])
       expect(state.zombies.count).to eq(2)
+      expect(state.humans).to match([])
       expect(state.zombies).to include([1, 1], [1, 2])
     end
 
@@ -180,9 +180,21 @@ describe State do
       state = State.new(humans: [[0, 0], [1, 1], [2, 2], [3, 3]],
                         zombies: [[3, 0]])
       expect(state.humans.count).to eq(4)
-      expect(state.humans).to match([[0, 0], [1, 1], [2, 2], [3, 3]])
       expect(state.zombies.count).to eq(1)
+      expect(state.humans).to match([[0, 0], [1, 1], [2, 2], [3, 3]])
       expect(state.zombies).not_to include([0, 0], [1, 1], [2, 2], [3, 3])
+    end
+
+    it "converts all surrounding humans to zombies" do
+      state = State.new(humans:[[1, 1], [1, 2], [1, 3], [2, 1], [2, 3],
+                                [3, 1], [3, 2], [3, 3]],
+                        zombies: [[2, 2]])
+      expect(state.humans.count).to eq(0)
+      expect(state.zombies.count).to eq(9)
+      expect(state.humans).to match([])
+      expect(state.zombies).to include([1, 1], [1, 2], [1, 3], [2, 1],
+                                       [2, 2], [2, 3], [3, 1], [3, 2],
+                                       [3, 3])
     end
   end
 end
