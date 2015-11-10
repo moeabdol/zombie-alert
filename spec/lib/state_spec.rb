@@ -96,26 +96,40 @@ describe State do
   describe "team movements" do
     it "identify if team memeber can move up" do
       state = State.new(humans: [[0, 0], [4, 0]])
-      expect(state.send(:can_move?, [0, 0], :up)).to be_falsy
-      expect(state.send(:can_move?, [4, 0], :up)).to be_truthy
+      expect(state.send(:can_move?, [0, 0], :up, [])).to be_falsy
+      expect(state.send(:can_move?, [4, 0], :up, [])).to be_truthy
     end
 
     it "identify if team memeber can move down" do
       state = State.new(humans: [[0, 0], [4, 0]])
-      expect(state.send(:can_move?, [0, 0], :down)).to be_truthy
-      expect(state.send(:can_move?, [4, 0], :down)).to be_falsy
+      expect(state.send(:can_move?, [0, 0], :down, [])).to be_truthy
+      expect(state.send(:can_move?, [4, 0], :down, [])).to be_falsy
     end
 
     it "identify if team memeber can move right" do
       state = State.new(humans: [[0, 0], [4, 4]])
-      expect(state.send(:can_move?, [0, 0], :right)).to be_truthy
-      expect(state.send(:can_move?, [4, 4], :right)).to be_falsy
+      expect(state.send(:can_move?, [0, 0], :right, [])).to be_truthy
+      expect(state.send(:can_move?, [4, 4], :right, [])).to be_falsy
     end
 
     it "identify if team memeber can move left" do
       state = State.new(humans: [[0, 0], [4, 4]])
-      expect(state.send(:can_move?, [0, 0], :left)).to be_falsy
-      expect(state.send(:can_move?, [4, 4], :left)).to be_truthy
+      expect(state.send(:can_move?, [0, 0], :left, [])).to be_falsy
+      expect(state.send(:can_move?, [4, 4], :left, [])).to be_truthy
+    end
+
+    it "prohibits a move if move already made by other team member" do
+      state = State.new(humans: [[0, 0], [4, 4]])
+      moves = [[0, 1], [3, 4]]
+      expect(state.send(:can_move?, [0, 0], :right, moves)).to be_falsy
+      expect(state.send(:can_move?, [4, 4], :up, moves)).to be_falsy
+    end
+
+    it "allows a move if move not made by other team member" do
+      state = State.new(humans: [[0, 0], [4, 4]])
+      moves = [[0, 2], [2, 4]]
+      expect(state.send(:can_move?, [0, 0], :right, moves)).to be_truthy
+      expect(state.send(:can_move?, [4, 4], :up, moves)).to be_truthy
     end
 
     it "moves team member up" do

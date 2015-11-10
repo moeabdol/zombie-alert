@@ -114,10 +114,11 @@ class State
 
   def move_team(turn)
     team = clone_team(turn)
+    moves = []
     team.shuffle.each do |member|
       directions.shuffle.each do |direction|
-        if can_move?(member, direction)
-          move_member(member, direction)
+        if can_move?(member, direction, moves)
+          moves << move_member(member, direction)
           break
         end
       end
@@ -136,18 +137,22 @@ class State
     [:up, :down, :right, :left]
   end
 
-  def can_move?(member, direction)
+  def can_move?(member, direction, moves)
     if direction == :up && member[0] > 0 &&
-        state[member[0] - 1][member[1]].nil?
+        state[member[0] - 1][member[1]].nil? &&
+          !moves.include?([member[0] - 1, member[1]])
       return true
     elsif direction == :down && member[0] < rows - 1 &&
-            state[member[0] + 1][member[1]].nil?
+            state[member[0] + 1][member[1]].nil? &&
+              !moves.include?([member[0] + 1, member[1]])
       return true
     elsif direction == :right && member[1] < cols - 1 &&
-            state[member[0]][cols - 1].nil?
+            state[member[0]][member[1] + 1].nil? &&
+              !moves.include?([member[0], member[1] + 1])
       return true
     elsif direction == :left && member[1] > 0 &&
-            state[member[0]][0].nil?
+            state[member[0]][member[1] - 1].nil? &&
+              !moves.include?([member[0], member[1] - 1])
       return true
     else
       return false
