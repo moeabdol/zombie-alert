@@ -79,20 +79,20 @@ describe State do
              ["Z", nil, nil, nil, nil, "H"]])
   end
 
-  it "can draw 6x6 state with 3 zombies and 2 humans" do
-    humans = [[0, 0], [3, 3], [5, 5]]
-    zombies = [[5, 0], [0, 5]]
-    expect{ State.new(rows: 6, cols: 6, humans: humans,
-      zombies: zombies).draw }.to output("########\n" +
-                                         "#H    Z#\n" +
-                                         "#      #\n" +
-                                         "#      #\n" +
-                                         "#   H  #\n" +
-                                         "#      #\n" +
-                                         "#Z    H#\n" +
-                                         "########\n").to_stdout
-  end
-
+  # it "can draw 6x6 state with 3 zombies and 2 humans" do
+  #   humans = [[0, 0], [3, 3], [5, 5]]
+  #   zombies = [[5, 0], [0, 5]]
+  #   expect{ State.new(rows: 6, cols: 6, humans: humans,
+  #     zombies: zombies).draw }.to output("########\n" +
+  #                                        "#H    Z#\n" +
+  #                                        "#      #\n" +
+  #                                        "#      #\n" +
+  #                                        "#   H  #\n" +
+  #                                        "#      #\n" +
+  #                                        "#Z    H#\n" +
+  #                                        "########\n").to_stdout
+  # end
+  #
   describe "team movements" do
     it "identify if team memeber can move up" do
       state = State.new(humans: [[0, 0], [4, 0]])
