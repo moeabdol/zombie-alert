@@ -127,11 +127,13 @@ class State
   end
 
   def clone_team(turn)
+    array = []
     if turn == :humans
-      zombies.clone
+      zombies.each { |z| array << z.clone }
     elsif turn == :zombies
-      humans.clone
+      humans.each { |h| array << h.clone }
     end
+    array
   end
 
   def directions
