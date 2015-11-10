@@ -13,6 +13,7 @@ class State
     @humans = args.fetch(:humans, [])
     @zombies = args.fetch(:zombies, [])
     validate_arguments
+    convert_humans_to_zombies
     construct_state
   end
 
@@ -37,9 +38,11 @@ class State
   def generate_substates(turn)
     moves = move_team(turn)
     if turn == :humans
-      [State.new(rows: rows, cols: cols, humans: moves, zombies: zombies)]
+      substates = [State.new(rows: rows, cols: cols, humans: humans,
+                             zombies: moves)]
     elsif turn == :zombies
-      [State.new(rows: rows, cols: cols, humans: humans, zombies: moves)]
+      substates = [State.new(rows: rows, cols: cols, humans: moves,
+                             zombies: zombies)]
     end
   end
 
@@ -67,6 +70,23 @@ class State
       return true if zombies.include?(h)
     end
     return false
+  end
+
+  def convert_humans_to_zombies
+    zombies.each do |zombie|
+      if zombie[0] > 0 && humans.include?([zombie[0] - 1, zombie[1]])
+        zombies << humans.delete([zombie[0] - 1, zombie[1]])
+      end
+      if zombie[0] < rows - 1 &&  humans.include?([zombie[0] + 1, zombie[1]])
+        zombies << humans.delete([zombie[0] + 1, zombie[1]])
+      end
+      if zombie[1] < cols - 1 &&  humans.include?([zombie[0], zombie[1] + 1])
+        zombies << humans.delete([zombie[0], zombie[1] + 1])
+      end
+      if zombie[1] > 0 &&  humans.include?([zombie[0], zombie[1] - 1])
+        zombies << humans.delete([zombie[0], zombie[1] - 1])
+      end
+    end
   end
 
   def construct_state
@@ -106,9 +126,9 @@ class State
 
   def clone_team(turn)
     if turn == :humans
-      humans.clone
-    elsif turn == :zombies
       zombies.clone
+    elsif turn == :zombies
+      humans.clone
     end
   end
 
