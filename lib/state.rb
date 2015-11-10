@@ -1,3 +1,4 @@
+require "colorize"
 require "forwardable"
 
 class State
@@ -23,9 +24,9 @@ class State
       print "#"
       cols.times do |c|
         if humans.include?([r, c])
-          print "H"
+          print "H".green
         elsif zombies.include?([r, c])
-          print "Z"
+          print "Z".red
         else
           print " "
         end
@@ -169,5 +170,6 @@ class State
     elsif direction == :left
       member[1] -= 1
     end
+    member
   end
 end
