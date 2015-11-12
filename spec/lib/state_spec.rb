@@ -211,4 +211,9 @@ describe State do
                                        [3, 3])
     end
   end
+
+  it "computes correct total euclidean distances" do
+      state = State.new(humans:[[1, 1], [1, 2]], zombies: [[4, 2], [4, 3]])
+      expect(state.compute_euclidean_distances).to eq(13)
+  end
 end

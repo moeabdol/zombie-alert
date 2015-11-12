@@ -1,5 +1,5 @@
 class Node
-  attr_accessor :state, :parent, :children, :turn, :depth
+  attr_accessor :state, :parent, :children, :turn, :depth, :value
 
   def initialize(args={})
     @state = args.fetch(:state, nil)
@@ -7,6 +7,7 @@ class Node
     @children = args.fetch(:children, [])
     @turn = args.fetch(:turn, :zombies)
     @depth = args.fetch(:depth, 0)
+    @value = args.fetch(:value, nil)
   end
 
   def generate_children
@@ -18,5 +19,9 @@ class Node
                            depth: depth + 1)
 
     end
+  end
+
+  def evaluate
+    @value = state.compute_euclidean_distances + state.humans.count
   end
 end

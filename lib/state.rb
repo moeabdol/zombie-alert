@@ -46,6 +46,16 @@ class State
     end
   end
 
+  def compute_euclidean_distances
+    distances = []
+    humans.each do |h|
+      zombies.each do |z|
+        distances << Math.sqrt((h[0] - z[0])**2 + (h[1] - z[1])**2)
+      end
+    end
+    distances.inject { |sum, d| sum + d }.round
+  end
+
   private
 
   def validate_arguments

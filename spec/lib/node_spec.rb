@@ -26,4 +26,11 @@ describe Node do
       expect(node.children.count).to eq(1)
     end
   end
+
+  it "evaluates node value correctly" do
+    state = State.new(humans:[[1, 1], [1, 2]], zombies: [[4, 2], [4, 3]])
+    node = Node.new(state: state)
+    node.evaluate
+    expect(node.value).to eq(15)
+  end
 end
