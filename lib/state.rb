@@ -37,12 +37,11 @@ class State
   end
 
   def generate_substates(turn)
-    moves = move_team(turn)
     if turn == :humans
       substates = [State.new(rows: rows, cols: cols, humans: humans,
-                             zombies: moves)]
+                             zombies: move_team(turn))]
     elsif turn == :zombies
-      substates = [State.new(rows: rows, cols: cols, humans: moves,
+      substates = [State.new(rows: rows, cols: cols, humans: move_team(turn),
                              zombies: zombies)]
     end
   end
