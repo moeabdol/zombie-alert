@@ -36,14 +36,44 @@ class State
     draw_bottom_border
   end
 
-  def generate_substates(turn)
-    if turn == :humans
-      substates = [State.new(rows: rows, cols: cols, humans: humans,
-                             zombies: move_team(turn))]
-    elsif turn == :zombies
-      substates = [State.new(rows: rows, cols: cols, humans: move_team(turn),
-                             zombies: zombies)]
+  def generate_zombie_substates(branching_factor=1)
+    substates = [State.new(rows: rows, cols: cols, humans: humans,
+                           zombies: move_team(:zombies))]
+    while branching_factor > substates.count do
+      moves = move_team(:zombies)
+      found = false
+      substates.each do |substate|
+        if substate.zombies.contains_all?(moves)
+          found = true
+          break
+        end
+      end
+      if found == false
+        substates << State.new(rows: rows, cols: cols, humans: humans,
+                                zombies: moves)
+      end
     end
+    substates
+  end
+
+  def generate_human_substates(branching_factor=1)
+    substates = [State.new(rows: rows, cols: cols, zombies: zombies,
+                           humans: move_team(:humans))]
+    while branching_factor > substates.count do
+      moves = move_team(:humans)
+      found = false
+      substates.each do |substate|
+        if substate.humans.contains_all?(moves)
+          found = true
+          break
+        end
+      end
+      if found == false
+        substates << State.new(rows: rows, cols: cols, zombies: zombies,
+                                humans: moves)
+      end
+    end
+    substates
   end
 
   def compute_euclidean_distances
@@ -122,8 +152,8 @@ class State
   alias_method :draw_top_border, :draw_top_bottom_border
   alias_method :draw_bottom_border, :draw_top_bottom_border
 
-  def move_team(turn)
-    team = clone_team(turn)
+  def move_team(team)
+    team = clone_team(team)
     moves = []
     team.shuffle.each do |member|
       directions.shuffle.each do |direction|
@@ -135,11 +165,11 @@ class State
     end
   end
 
-  def clone_team(turn)
+  def clone_team(team)
     array = []
-    if turn == :humans
+    if team == :zombies
       zombies.each { |z| array << z.clone }
-    elsif turn == :zombies
+    elsif team == :humans
       humans.each { |h| array << h.clone }
     end
     array
@@ -182,5 +212,13 @@ class State
       member[1] -= 1
     end
     member
+  end
+end
+
+class Array
+  def contains_all?(other)
+    other = other.dup
+    each { |e| if i = other.index(e) then other.delete_at(i) end }
+    other.empty?
   end
 end

@@ -216,4 +216,53 @@ describe State do
       state = State.new(humans:[[1, 1], [1, 2]], zombies: [[4, 2], [4, 3]])
       expect(state.compute_euclidean_distances).to eq(13)
   end
+
+  describe "substates generation" do
+    let(:state) { State.new(humans:[[1, 1], [1, 2]],
+                            zombies: [[4, 2], [4, 3]]) }
+
+    it "generates substates where humans move" do
+      substates = state.generate_human_substates
+      expect(substates.count).to eq(1)
+      expect(substates[0].humans).not_to match([[1, 1], [1, 2]])
+      expect(substates[0].zombies).to match([[4, 2], [4, 3]])
+    end
+
+    it "generates substates where zombies move" do
+      substates = state.generate_zombie_substates
+      expect(substates.count).to eq(1)
+      expect(substates[0].humans).to match([[1, 1], [1, 2]])
+      expect(substates[0].zombies).not_to match([[4, 2], [4, 3]])
+    end
+
+    it "generates 2 unique substates where humans move" do
+      substates = state.generate_human_substates(2)
+      expect(substates.count).to eq(2)
+      expect(substates[0].humans).not_to match([[1, 1], [1, 2]])
+      expect(substates[1].humans).not_to match([[1, 1], [1, 2]])
+      expect(substates[0].humans).not_to match(substates[1].humans)
+      expect(substates[0].zombies).to match([[4, 2], [4, 3]])
+      expect(substates[1].zombies).to match([[4, 2], [4, 3]])
+    end
+
+    it "generates 2 unique substates where zombies move" do
+      substates = state.generate_zombie_substates(2)
+      expect(substates.count).to eq(2)
+      expect(substates[0].zombies).not_to match([[4, 2], [4, 3]])
+      expect(substates[1].zombies).not_to match([[4, 2], [4, 3]])
+      expect(substates[0].zombies).not_to match(substates[1].zombies)
+      expect(substates[0].humans).to match([[1, 1], [1, 2]])
+    end
+  end
+end
+
+describe Array do
+  it "identifies if array contains all elements of another array" do
+    a = [[0, 0], [1, 1], [2, 2]]
+    b = [[2, 2], [0, 0]]
+    c = [[3, 3]]
+    expect(a.contains_all?(b)).to be_truthy
+    expect(b.contains_all?(a)).to be_falsy
+    expect(a.contains_all?(c)).to be_falsy
+  end
 end
