@@ -17,11 +17,8 @@ class Node
       states = state.generate_zombie_substates
     end
     states.each do |state|
-      children << Node.new(state: state,
-                           parent: self,
-                           turn: turn == :zombies ? :humans : :zombies,
-                           depth: depth + 1)
-
+      children << Node.new(state: state, parent: self, depth: depth + 1,
+                           turn: turn == :zombies ? :humans : :zombies)
     end
   end
 
