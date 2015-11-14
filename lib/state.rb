@@ -36,10 +36,11 @@ class State
     draw_bottom_border
   end
 
-  def generate_zombie_substates(branching_factor=1)
+  def generate_zombie_substates
+    team_move_count = approximate_possible_team_moves_count(zombies)
     substates = [State.new(rows: rows, cols: cols, humans: humans,
                            zombies: move_team(:zombies))]
-    while branching_factor > substates.count do
+    while team_move_count > substates.count do
       moves = move_team(:zombies)
       found = false
       substates.each do |substate|
@@ -56,10 +57,11 @@ class State
     substates
   end
 
-  def generate_human_substates(branching_factor=1)
+  def generate_human_substates
+    team_move_count = approximate_possible_team_moves_count(humans)
     substates = [State.new(rows: rows, cols: cols, zombies: zombies,
                            humans: move_team(:humans))]
-    while branching_factor > substates.count do
+    while team_move_count > substates.count do
       moves = move_team(:humans)
       found = false
       substates.each do |substate|
@@ -212,6 +214,18 @@ class State
       member[1] -= 1
     end
     member
+  end
+
+  def approximate_possible_team_moves_count(team)
+    move_count = 0
+    team.each do |member|
+      directions.each do |direction|
+        if can_move?(member, direction, [])
+          move_count += 1
+        end
+      end
+    end
+    (move_count / team.count).round
   end
 end
 

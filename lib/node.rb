@@ -11,7 +11,11 @@ class Node
   end
 
   def generate_children
-    states = state.generate_substates(turn)
+    if turn == :zombies
+      states = state.generate_human_substates
+    elsif turn == :humans
+      states = state.generate_zombie_substates
+    end
     states.each do |state|
       children << Node.new(state: state,
                            parent: self,

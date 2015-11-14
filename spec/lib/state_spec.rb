@@ -223,35 +223,26 @@ describe State do
 
     it "generates substates where humans move" do
       substates = state.generate_human_substates
-      expect(substates.count).to eq(1)
+      expect(substates.count).to eq(3)
       expect(substates[0].humans).not_to match([[1, 1], [1, 2]])
+      expect(substates[1].humans).not_to match([[1, 1], [1, 2]])
+      expect(substates[2].humans).not_to match([[1, 1], [1, 2]])
+      expect(substates[0].humans).not_to match(substates[1].humans)
+      expect(substates[0].humans).not_to match(substates[2].humans)
+      expect(substates[1].humans).not_to match(substates[2].humans)
       expect(substates[0].zombies).to match([[4, 2], [4, 3]])
+      expect(substates[1].zombies).to match([[4, 2], [4, 3]])
+      expect(substates[2].zombies).to match([[4, 2], [4, 3]])
     end
 
     it "generates substates where zombies move" do
       substates = state.generate_zombie_substates
-      expect(substates.count).to eq(1)
+      expect(substates.count).to eq(2)
       expect(substates[0].humans).to match([[1, 1], [1, 2]])
-      expect(substates[0].zombies).not_to match([[4, 2], [4, 3]])
-    end
-
-    it "generates 2 unique substates where humans move" do
-      substates = state.generate_human_substates(2)
-      expect(substates.count).to eq(2)
-      expect(substates[0].humans).not_to match([[1, 1], [1, 2]])
-      expect(substates[1].humans).not_to match([[1, 1], [1, 2]])
-      expect(substates[0].humans).not_to match(substates[1].humans)
-      expect(substates[0].zombies).to match([[4, 2], [4, 3]])
-      expect(substates[1].zombies).to match([[4, 2], [4, 3]])
-    end
-
-    it "generates 2 unique substates where zombies move" do
-      substates = state.generate_zombie_substates(2)
-      expect(substates.count).to eq(2)
+      expect(substates[1].humans).to match([[1, 1], [1, 2]])
       expect(substates[0].zombies).not_to match([[4, 2], [4, 3]])
       expect(substates[1].zombies).not_to match([[4, 2], [4, 3]])
       expect(substates[0].zombies).not_to match(substates[1].zombies)
-      expect(substates[0].humans).to match([[1, 1], [1, 2]])
     end
   end
 end
