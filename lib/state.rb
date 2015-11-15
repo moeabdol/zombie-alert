@@ -85,7 +85,11 @@ class State
         distances << Math.sqrt((h[0] - z[0])**2 + (h[1] - z[1])**2)
       end
     end
-    distances.inject { |sum, d| sum + d }.round
+    if distances.any?
+      distances.inject { |sum, d| sum + d }.round
+    else
+      0
+    end
   end
 
   private
