@@ -93,6 +93,7 @@ describe State do
   #                                        "########\n").to_stdout
   # end
   #
+
   describe "team movements" do
     it "identify if team memeber can move up" do
       state = State.new(humans: [[0, 0], [4, 0]])

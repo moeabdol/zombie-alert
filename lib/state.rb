@@ -38,7 +38,7 @@ class State
 
   def generate_zombie_substates
     team_move_count = approximate_possible_team_moves_count(zombies)
-    substates = [State.new(rows: rows, cols: cols, humans: humans,
+    substates = [State.new(rows: rows, cols: cols, humans: humans.clone,
                            zombies: move_team(:zombies))]
     while team_move_count > substates.count do
       moves = move_team(:zombies)
@@ -50,7 +50,7 @@ class State
         end
       end
       if found == false
-        substates << State.new(rows: rows, cols: cols, humans: humans,
+        substates << State.new(rows: rows, cols: cols, humans: humans.clone,
                                 zombies: moves)
       end
     end
@@ -59,7 +59,7 @@ class State
 
   def generate_human_substates
     team_move_count = approximate_possible_team_moves_count(humans)
-    substates = [State.new(rows: rows, cols: cols, zombies: zombies,
+    substates = [State.new(rows: rows, cols: cols, zombies: zombies.clone,
                            humans: move_team(:humans))]
     while team_move_count > substates.count do
       moves = move_team(:humans)
@@ -71,7 +71,7 @@ class State
         end
       end
       if found == false
-        substates << State.new(rows: rows, cols: cols, zombies: zombies,
+        substates << State.new(rows: rows, cols: cols, zombies: zombies.clone,
                                 humans: moves)
       end
     end

@@ -1,5 +1,5 @@
 class Node
-  attr_accessor :state, :parent, :children, :turn, :depth, :value
+  attr_accessor :state, :parent, :children, :turn, :depth, :value, :solution
 
   def initialize(args={})
     @state = args.fetch(:state, nil)
@@ -8,6 +8,7 @@ class Node
     @turn = args.fetch(:turn, :zombies)
     @depth = args.fetch(:depth, 0)
     @value = args.fetch(:value, nil)
+    @solution = args.fetch(:solution, false)
   end
 
   def generate_children
