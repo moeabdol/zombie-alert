@@ -48,5 +48,9 @@ describe Node do
     node = Node.new(state: state)
     node.evaluate
     expect(node.value).to eq(15)
+    state = State.new(zombies: [[4, 2], [4, 3]])
+    node = Node.new(state: state)
+    node.evaluate
+    expect(node.value).to eq(0)
   end
 end
