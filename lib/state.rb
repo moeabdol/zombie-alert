@@ -1,3 +1,4 @@
+require "pry"
 require "colorize"
 require "forwardable"
 
@@ -83,6 +84,20 @@ class State
     humans.each do |h|
       zombies.each do |z|
         distances << Math.sqrt((h[0] - z[0])**2 + (h[1] - z[1])**2)
+      end
+    end
+    if distances.any?
+      distances.inject { |sum, d| sum + d }.round
+    else
+      0
+    end
+  end
+
+  def compute_manhattan_distances
+    distances = []
+    humans.each do |h|
+      zombies.each do |z|
+        distances << (h[0] - z[0]).abs + (h[1] - z[1]).abs
       end
     end
     if distances.any?
@@ -229,7 +244,11 @@ class State
         end
       end
     end
-    (move_count / team.count).round
+    if team.count == 1
+      move_count
+    else
+      (move_count / 3).round
+    end
   end
 end
 

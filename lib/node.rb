@@ -1,13 +1,13 @@
 class Node
-  attr_accessor :state, :parent, :children, :turn, :depth, :value, :solution
+  attr_accessor :state, :parent, :children, :turn, :depth, :score, :solution
 
   def initialize(args={})
     @state = args.fetch(:state, nil)
     @parent = args.fetch(:parent, nil)
     @children = args.fetch(:children, [])
-    @turn = args.fetch(:turn, :zombies)
+    @turn = args.fetch(:turn, :humans)
     @depth = args.fetch(:depth, 0)
-    @value = args.fetch(:value, nil)
+    @score = args.fetch(:score, nil)
     @solution = args.fetch(:solution, false)
   end
 
@@ -24,6 +24,7 @@ class Node
   end
 
   def evaluate
-    @value = state.compute_euclidean_distances + state.humans.count
+    # @score = state.compute_euclidean_distances
+    @score = state.compute_manhattan_distances
   end
 end

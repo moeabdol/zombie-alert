@@ -224,7 +224,7 @@ describe State do
     let(:state) { State.new(humans:[[1, 1], [1, 2]],
                             zombies: [[4, 2], [4, 3]]) }
 
-    it "generates substates where humans move" do
+    xit "generates substates where humans move" do
       substates = state.generate_human_substates
       expect(substates.count).to eq(3)
       expect(substates[0].humans).not_to match([[1, 1], [1, 2]])
@@ -238,7 +238,7 @@ describe State do
       expect(substates[2].zombies).to match([[4, 2], [4, 3]])
     end
 
-    it "generates substates where zombies move" do
+    xit "generates substates where zombies move" do
       substates = state.generate_zombie_substates
       expect(substates.count).to eq(2)
       expect(substates[0].humans).to match([[1, 1], [1, 2]])
